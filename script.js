@@ -1,58 +1,61 @@
 const display = document.querySelector("span.display");
 const div0Error = "Can't divide by 0!";
 display.textContent = "";
-let currentValue;
+let result;
+let input;
 let operator;
-let newInputMode = true;
-document.querySelectorAll("button[data-value]").forEach(element => {
-    element.addEventListener("click", () => {
-        if (newInputMode || display.textContent === div0Error) {
-            display.textContent = "";
-            newInputMode = false;
+let newInput;
+let isLastInputOperator;
+init();
+
+const inputButtons = document.querySelectorAll("button[data-value]");
+inputButtons.forEach((element) => element.addEventListener("click", () => {
+    isLastInputOperator = false;
+    if (newInput) {
+        display.textContent = "";
+        newInput = false;
+    }
+
+    if (element.getAttribute("data-value") === ".") {
+        if (display.textContent.length != 0 && !display.textContent.includes(".")) {
+            display.textContent += ".";
         }
-        display.textContent += element.getAttribute("data-value");
-    })
-})
+        return;
+    }
+    display.textContent += element.getAttribute("data-value");
+}));
 
-document.querySelector("button#button-delete").addEventListener("click", () => {
-    display.textContent = display.textContent.slice(0, display.textContent.length - 1);
-})
-
-document.querySelector("button#button-clear").addEventListener("click", () => {
-    display.textContent = "";
-    currentValue = null;
-    operator = null;
-    newInputMode = true;
-})
-
-document.querySelectorAll("button[data-operator]").forEach(element => {
-    element.addEventListener("click", () => {
-        newInputMode = true;
+const operatorButtons = document.querySelectorAll("button[data-operator]");
+operatorButtons.forEach(element => element.addEventListener("click", () => {
+    if (!isLastInputOperator) {
+        newInput = true;
+        isLastInputOperator = true;
         if (!operator) {
             operator = element.getAttribute("data-operator");
-        }
-
-        if (!currentValue) {
-            currentValue = display.textContent;
+            result = display.textContent;
             return;
         }
 
-        currentValue = operate(currentValue, display.textContent, operator);
-        display.textContent = currentValue;
+        result = operate(result, display.textContent, operator);
+        display.textContent = result;
         operator = element.getAttribute("data-operator");
-    })
-});
+    }
+}));
 
-document.querySelector("button#button-equals").addEventListener("click", element => {
-    if (!operator) {
+const equalsButton = document.querySelector("button#button-equals");
+equalsButton.addEventListener("click", () => {
+    if (!operator || !result || !display.textContent) {
         return;
     }
 
-    currentValue = operate(currentValue, display.textContent, operator);
-    display.textContent = currentValue;
-    currentValue = null;
+    result = operate(result, display.textContent, operator);
+    display.textContent = result;
     operator = null;
+    isLastInputOperator = false;
 });
+
+const clearButton = document.querySelector("#button-clear");
+clearButton.addEventListener("click", () => init());
 
 function add(number1, number2) {
     return number1 + number2;
@@ -71,22 +74,28 @@ function divide(dividend, divisor) {
         return div0Error;
     }
 
-    return (dividend / divisor).toFixed(2);
+    return dividend / divisor;
 }
 
 function operate(number1, number2, operator) {
     const n1 = parseFloat(number1);
     const n2 = parseFloat(number2);
+    let result;
     switch (operator) {
         case "+":
-            return add(n1, n2);
+            result = add(n1, n2);
+            break;
         case "-":
-            return subtract(n1, n2);
+            result = subtract(n1, n2);
+            break;
         case "*":
-            return multiply(n1, n2);
+            result = multiply(n1, n2);
+            break;
         case "/":
-            return divide(n1, n2);
+            result = divide(n1, n2);
+            break;
     }
+    return round(result, 2);
 }
 
 function getDefaultValue(operator) {
@@ -97,4 +106,17 @@ function getDefaultValue(operator) {
     if (operator === "*" || operator === "/") {
         return 1;
     }
+}
+
+function round(value, decimals) {
+    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+}
+
+function init() {
+    display.textContent = "";
+    result = null;
+    input = null;
+    operator = null;
+    newInput = true;
+    isLastInputOperator = true;
 }

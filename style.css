@@ -11,8 +11,9 @@ div.calculator-container {
     padding: 10px;
     column-gap: 5px;
     row-gap: 5px;
-    width: 200px;
-    height: 160px;
+    width: 300px;
+    height: 320px;
+    background-color: teal;
 }
 
 div.calculator-container>button {
@@ -28,7 +29,7 @@ span.display {
     border: 1px solid black;
     border-radius: 5px;
     box-shadow: 2px 1px 1px black inset;
-    background-color: dimgray;
+    background-color: darkgray;
     color: honeydew;
     padding-right: 3px;
     white-space: nowrap;
