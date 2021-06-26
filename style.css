@@ -1,0 +1,59 @@
+html {
+    background-color: darkgray;
+}
+
+div.calculator-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    margin: auto;
+    border: 1px solid black;
+    padding: 10px;
+    column-gap: 5px;
+    row-gap: 5px;
+    width: 200px;
+    height: 160px;
+}
+
+div.calculator-container>button {
+    transition: background-color 0.2s;
+}
+
+span.display {
+    display: flex;
+    grid-column: span 5;
+    text-align: end;
+    align-items: center;
+    justify-content: flex-end;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 2px 1px 1px black inset;
+    background-color: dimgray;
+    color: honeydew;
+    padding-right: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+button.calc-input {
+    background-color: whitesmoke;
+    border: 1px solid black;
+}
+
+.background-transition {
+    transition: background-color 0.1s;
+}
+
+button.calc-input:active {
+    background-color: dimgray;
+}
+
+button.calc-action {
+    background-color: darkslategrey;
+    border: 1px solid black;
+    color: white;
+}
+
+button.calc-action:active {
+    background-color: teal;
+}
